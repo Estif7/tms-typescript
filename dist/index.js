@@ -54,4 +54,18 @@ const testLab = {
 };
 console.log(`Quiz Grade: ${calculateGrade(testQuiz)}%`); // Expected: 80%
 console.log(`Lab Grade: ${calculateGrade(testLab)}%`); // Expected: 86.5%
+import { describeEnrollment } from "./models/enrollment.model.js";
+console.log("--- Running Exercise 5: Enrollment Status Tests ---");
+const pendingEnrollment = {
+    status: "PENDING",
+    requestedAt: Temporal.Now.instant(),
+    studentId: "STU-001",
+    courseId: "CRS-101",
+};
+const activeEnrollment = {
+    status: "ACTIVE",
+    startDate: Temporal.Now.plainDateISO(),
+};
+console.log(describeEnrollment(pendingEnrollment));
+console.log(describeEnrollment(activeEnrollment));
 //# sourceMappingURL=index.js.map
