@@ -91,3 +91,18 @@ const activeEnrollment: EnrollmentStatus = {
 
 console.log(describeEnrollment(pendingEnrollment));
 console.log(describeEnrollment(activeEnrollment));
+
+
+
+import { describeCourse } from "./models/course.model.js";
+import type { CourseStatus } from "./models/course.model.js";
+
+console.log("--- Running Exercise 5 Part B: Course Status Tests ---");
+
+const webDev: CourseStatus = {
+  status: "ACTIVE",
+  enrolledCount: 28,
+  startDate: Temporal.PlainDate.from("2026-09-01"),
+};
+
+console.log(describeCourse(webDev));
