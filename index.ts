@@ -145,3 +145,31 @@ const courseListRes: ApiResponse<Course[]> = {
 // Render both using the exact same generic engine function
 console.log(renderResponse(studentRes, (s) => `${s.name} GPA: ${s.gpa ?? "N/A"}`));
 console.log(renderResponse(courseListRes, (courses) => courses.map((c) => c.title).join(", ")));
+
+
+
+
+console.log("\n--- Running Exercise 7: Temporal Timestamp Tests ---");
+
+// 1. Record the exact global moment an enrollment occurs (UTC)
+const approvedAt: Temporal.Instant = Temporal.Now.instant();
+console.log(`Approved at (UTC):       ${approvedAt.toString()}`);
+
+// 2. Display the exact same moment across different wall-clock timezones
+const addisTime = approvedAt.toZonedDateTimeISO("Africa/Addis_Ababa");
+const londonTime = approvedAt.toZonedDateTimeISO("Europe/London");
+
+console.log(`Addis Ababa Wall Time:   ${addisTime.toPlainTime().toString()}`);
+console.log(`London Wall Time:        ${londonTime.toPlainTime().toString()}`);
+
+// 3. Calculate exact day counts until a course starts (Date-Only, no time drift)
+const courseStart = Temporal.PlainDate.from("2026-09-01");
+const today = Temporal.Now.plainDateISO();
+
+const daysUntilStart = today.until(courseStart).total({ unit: "days" });
+console.log(`${Math.floor(daysUntilStart)} days until course starts`);
+
+// 4. Determine assignment deadline duration remaining
+const deadline = Temporal.PlainDate.from("2026-12-15");
+const remainingDuration = today.until(deadline);
+console.log(`${remainingDuration.total({ unit: "days" })} days until assignment is due`);
