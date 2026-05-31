@@ -2,6 +2,21 @@ import { Temporal } from "@js-temporal/polyfill";
 import type { Student } from "./models/student.model.js";
 import { isStudent, parseStudent } from "./models/student.model.js";
 
+const student: Student = {
+  id: "STU-001",
+  name: "Hana Tadesse",
+  enrollmentDate: Temporal.Now.instant(),
+};
+
+// TEST 1: Commented out because readonly prevents mutation
+// student.id = "STU-999"; 
+
+// TEST 2: Commented out because it's unsafe without checking for undefined
+// console.log(student.gpa.toFixed(2)); 
+
+// SAFE ACCESS: The compiler loves this!
+console.log(student.gpa?.toFixed(2) ?? "Not yet graded\n");
+
 // --- Part A: Testing Type Guards ---
 function processStudent(raw: unknown) {
   if (isStudent(raw)) {
@@ -30,3 +45,27 @@ try {
     console.error("Caught expected parsing exception:", error.message);
   }
 }
+
+
+
+import { calculateGrade } from "./models/assessment.model.js";
+import type { AssessmentItem } from "./models/assessment.model.js";
+
+console.log("--- Running Discriminated Union Tests ---");
+
+const testQuiz: AssessmentItem = {
+  kind: "quiz",
+  title: "TypeScript Basics Quiz",
+  score: 8,
+  totalQuestions: 10,
+};
+
+const testLab: AssessmentItem = {
+  kind: "lab",
+  title: "TMS Domain Models Lab",
+  functionalityScore: 85,
+  codeQualityScore: 90,
+};
+
+console.log(`Quiz Grade: ${calculateGrade(testQuiz)}%`); // Expected: 80%
+console.log(`Lab Grade: ${calculateGrade(testLab)}%`);   // Expected: 86.5%
