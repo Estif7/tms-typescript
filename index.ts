@@ -106,3 +106,42 @@ const webDev: CourseStatus = {
 };
 
 console.log(describeCourse(webDev));
+
+
+
+
+import { renderResponse } from "./models/api-response.model.js";
+import type { ApiResponse } from "./models/api-response.model.js";
+import type { Course } from "./models/course.model.js";
+
+console.log("--- Running Exercise 6: Generic API Response Tests ---");
+
+// Test Case 1: API Response wrapping a single Student entity
+const studentRes: ApiResponse<Student> = {
+  status: "success",
+  data: {
+    id: "STU-001",
+    name: "Dawit Bekele",
+    enrollmentDate: Temporal.Now.instant(),
+    gpa: 3.4,
+  },
+  fetchedAt: Temporal.Now.instant(),
+};
+
+// Test Case 2: API Response wrapping an array of Course entities
+const courseListRes: ApiResponse<Course[]> = {
+  status: "success",
+  data: [
+    {
+      id: "CRS-101",
+      title: "Web Development Fundamentals",
+      capacity: 30,
+      startDate: Temporal.PlainDate.from("2026-09-01"),
+    },
+  ],
+  fetchedAt: Temporal.Now.instant(),
+};
+
+// Render both using the exact same generic engine function
+console.log(renderResponse(studentRes, (s) => `${s.name} GPA: ${s.gpa ?? "N/A"}`));
+console.log(renderResponse(courseListRes, (courses) => courses.map((c) => c.title).join(", ")));
