@@ -37,6 +37,10 @@
     "verbatimModuleSyntax": true,
     "isolatedModules": true,
 
+        "paths": {
+            "models/*": ["./models/*"]
+        },
+
     "target": "es2025",
     "module": "nodenext",
     "strict": true,
