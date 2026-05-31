@@ -1,17 +1,32 @@
-import { Temporal } from "@js-temporal/polyfill"; 
-import type { Student } from "./models/student.model.js"; 
+import { Temporal } from "@js-temporal/polyfill";
+import type { Student } from "./models/student.model.js";
+import { isStudent, parseStudent } from "./models/student.model.js";
 
-const student: Student = { 
-  id: "STU-001", 
-  name: "Hana Tadesse",
-  enrollmentDate: Temporal.Now.instant(), 
-};
+// --- Part A: Testing Type Guards ---
+function processStudent(raw: unknown) {
+  if (isStudent(raw)) {
+    // Inside this block, 'raw' is automatically narrowed down to the Student type!
+    const gpaDisplay = (raw as Student).gpa?.toFixed(2) ?? "Not yet graded";
+    console.log(`Student ${raw.name} GPA: ${gpaDisplay}`);
+  } else {
+    console.error("Invalid student data received via guard check");
+  }
+}
 
-// ❌ TEST 1: Try mutating a readonly property
-// student.id = "STU-999";
+console.log("--- Running Guard Tests ---");
+processStudent({ id: "STU-001", name: "Hana", gpa: 3.7 }); // Should print student info
+processStudent(42);                                       // Should print invalid data warning cleanly
 
-// ❌ TEST 2: Try unsafe access on an optional property
-// console.log(student.gpa.toFixed(2)); 
+// --- Part B: Testing Parse Exceptions ---
+console.log("\n--- Running Parser Tests ---");
+try {
+  const validParsed = parseStudent({ id: "STU-002", name: "Dawit" });
+  console.log("Successfully parsed:", validParsed);
 
-// ✅ SAFE ACCESS: The compiler expects this
-console.log(student.gpa?.toFixed(2) ?? "Not yet graded"); 
+  // This one will fail intentionally to test our descriptive type errors
+  parseStudent({ id: 99, name: "Makeda" }); 
+} catch (error) {
+  if (error instanceof TypeError) {
+    console.error("Caught expected parsing exception:", error.message);
+  }
+}
